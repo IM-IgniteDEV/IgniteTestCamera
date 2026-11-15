@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "ignitetestcamera",
+  "version": "${version}",
+  "name": "IgniteTestCamera",
+  "description": "Client-side cinematic camera control for IgniteTestTool over a localhost socket. Detached free camera with roll and live FOV, driven by keyframed paths at render framerate. Visual admin camera only, no gameplay packets.",
+  "authors": [
+    "IgniteDEV"
+  ],
+  "contact": {},
+  "license": "ARR",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.ignitedev.ignitetestcamera.IgniteTestCamera"
+    ]
+  },
+  "mixins": [
+    "ignitetestcamera.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

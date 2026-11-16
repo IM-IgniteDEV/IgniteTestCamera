@@ -6,7 +6,8 @@
   "client": [
     "CameraMixin",
     "GameRendererMixin",
-    "EntityRendererMixin"
+    "EntityRendererMixin",
+    "LivingEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

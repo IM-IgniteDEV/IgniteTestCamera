@@ -48,7 +48,8 @@ Mutating commands are applied on the client thread; the socket never blocks the 
   of `linear`, `in`, `out`, `inout`, `smooth` (default). Needs at least 2 keyframes.
 - `{"cmd":"fov","value":30}` - live FOV override for dolly-zoom ramps. `value<=0` clears it.
 - `{"cmd":"hud","hide":true,"nametags":true}` - hide HUD, crosshair and hand (vanilla `hudHidden`)
-  and, separately, entity nametags. `hide:false` restores. `nametags` defaults to `hide`.
+  and, separately, entity nametags. `hide:false` restores. `nametags` defaults to `hide`;
+  `hide:true,nametags:false` keeps name tags drawn even though vanilla skips them with the HUD hidden.
 - `{"cmd":"status"}` -> `{"ok":true,"active":..,"playing":..,"hudHidden":..,"nametagsHidden":..,
   "fovOverride":..,"pose":{"x":..,"y":..,"z":..,"yaw":..,"pitch":..,"roll":..,"fov":..}}`.
   `pose` is the last pose actually applied to the camera this frame.
@@ -74,6 +75,9 @@ smooth at the client's true framerate rather than stepped at 20 Hz.
   returned FOV with the commanded value when an override is active.
 - `EntityRendererMixin` -> `EntityRenderer.hasLabel(Entity, double)` at HEAD (require 0): returns
   false while nametags are hidden.
+- `LivingEntityRendererMixin` -> `LivingEntityRenderer.hasLabel(LivingEntity, double)`, the label check for
+  players and mobs: HEAD returns false while nametags are hidden, and the `MinecraftClient.isHudEnabled()`
+  call is redirected to true while the mod hides the HUD, so name tags can stay on.
 
 HUD/hand/crosshair hiding uses the vanilla `GameOptions.hudHidden` flag rather than a mixin.
 
@@ -87,5 +91,5 @@ destabilizing Sodium/Iris rendering, so it was left out per the brief.
 
 - Roll: whether the renderer consumes `Camera.getRotation()` for the view matrix (it should on
   1.21.11). If the horizon does not tilt, apply the Z roll in the world-render matrix instead.
-- Nametag hide: the refactored label path - `hasLabel` is the gate used here; verify in game.
+- Nametag hide and show with the HUD hidden: `LivingEntityRenderer.hasLabel` is the gate; verify in game.
 - That `hudHidden` still hides the first-person hand on 1.21.11.

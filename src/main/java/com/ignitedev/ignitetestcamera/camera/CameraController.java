@@ -15,7 +15,7 @@ public final class CameraController {
     private volatile boolean hudHideRequested;
     private volatile boolean nametagsHidden;
 
-    private record Playback(Keyframe[] frames, long startNanos, double durationMs, boolean loop) {
+    private record Playback(Keyframe[] frames, long startNanos, double durationMs, boolean loop, Easing ease) {
     }
 
     public boolean isActive() {
@@ -37,12 +37,12 @@ public final class CameraController {
         this.active = true;
     }
 
-    public void playPath(Keyframe[] frames, double durationMs, boolean loop) {
+    public void playPath(Keyframe[] frames, double durationMs, boolean loop, Easing ease) {
         if (frames == null || frames.length == 0) {
             return;
         }
         this.staticPose = null;
-        this.path = new Playback(frames, System.nanoTime(), durationMs, loop);
+        this.path = new Playback(frames, System.nanoTime(), durationMs, loop, ease);
         this.active = true;
     }
 
@@ -132,6 +132,9 @@ public final class CameraController {
         if (elapsed >= last) {
             return poseOf(f[n - 1]);
         }
+        // Ease the whole path, not each segment, or the camera stops at every keyframe.
+        double first = f[0].t();
+        elapsed = first + (last - first) * p.ease().apply((elapsed - first) / (last - first));
 
         int i = 0;
         while (i < n - 1 && f[i + 1].t() < elapsed) {

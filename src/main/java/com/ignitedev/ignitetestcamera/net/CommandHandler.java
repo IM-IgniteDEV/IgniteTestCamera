@@ -109,12 +109,12 @@ public final class CommandHandler {
             float roll = optFloat(kf, "roll", 0.0f);
             boolean hasFov = kf.has("fov");
             float fovValue = hasFov ? kf.get("fov").getAsFloat() : 0.0f;
-            Easing ease = Easing.byName(optString(kf, "ease", null));
+            Easing ease = Easing.byName(optString(kf, "ease", null), Easing.LINEAR);
             frames[i] = new Keyframe(t, x, y, z, yaw, pitch, roll, fovValue, hasFov, ease);
         }
         Arrays.sort(frames, Comparator.comparingDouble(Keyframe::t));
 
-        controller.playPath(frames, durationMs, loop);
+        controller.playPath(frames, durationMs, loop, Easing.byName(optString(obj, "ease", null)));
         JsonObject res = ok();
         res.addProperty("ms", durationMs);
         res.addProperty("keyframes", n);

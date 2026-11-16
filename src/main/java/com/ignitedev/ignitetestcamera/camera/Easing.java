@@ -19,8 +19,12 @@ public enum Easing {
     }
 
     public static Easing byName(String name) {
+        return byName(name, SMOOTH);
+    }
+
+    public static Easing byName(String name, Easing fallback) {
         if (name == null) {
-            return SMOOTH;
+            return fallback;
         }
         return switch (name.trim().toLowerCase()) {
             case "linear", "lin" -> LINEAR;
